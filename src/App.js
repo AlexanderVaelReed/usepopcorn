@@ -59,10 +59,21 @@ export default function App() {
   );
 }
 
-fun
+function Search() {
+const [query, setQuery] = useState("");
+  return ( <input
+        className="search"
+        type="text"
+        placeholder="Search movies..."
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />)
+
+
+}
 
 function NavBar() {
-  const [query, setQuery] = useState("");
+  
   return (
     <nav className="nav-bar">
       <div className="logo">
