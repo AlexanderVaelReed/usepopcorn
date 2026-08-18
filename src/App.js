@@ -59,6 +59,8 @@ export default function App() {
   );
 }
 
+fun
+
 function NavBar() {
   const [query, setQuery] = useState("");
   return (
