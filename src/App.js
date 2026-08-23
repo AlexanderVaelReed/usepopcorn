@@ -48,7 +48,9 @@ const tempWatchedData = [
 ];
 
 const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+  arr.length === 0
+    ? 0
+    : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 export default function App() {
   return (
@@ -56,6 +58,25 @@ export default function App() {
       <NavBar />
       <Main />
     </>
+  );
+}
+
+function NavBar() {
+  return (
+    <nav className="nav-bar">
+      <Logo />
+      <Search />
+      <NumResults />
+    </nav>
+  );
+}
+
+function Logo() {
+  return (
+    <div className="logo">
+      <span role="img">🍿</span>
+      <h1>usePopcorn</h1>
+    </div>
   );
 }
 
@@ -71,89 +92,72 @@ function Search() {
     />
   );
 }
+
 function NumResults() {
   return (
     <p className="num-results">
-      Found <strong>x</strong> results
+      Found <strong>3</strong> results
     </p>
-  );
-}
-function Logo() {
-  return (
-    <div className="logo">
-      <span role="img">🍿</span>
-      <h1>usePopcorn</h1>
-    </div>
-  );
-}
-function NavBar() {
-  return (
-    <nav className="nav-bar">
-      <Logo />
-      <Search />
-      <NumResults />
-    </nav>
   );
 }
 
 function Main() {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
   return (
     <main className="main">
       <ListBox />
-      <watchedBox />
+      <WatchedBox />
     </main>
   );
 }
-function MoviesList(){
-return (
-  <ul className="list">
-    {movies?.map((movie) => (
-      <li key={movie.imdbID}>
-        <img src={movie.Poster} alt={`${movie.Title} poster`} />
-        <h3>{movie.Title}</h3>
-        <div>
-          <p>
-            <span>🗓</span>
-            <span>{movie.Year}</span>
-          </p>
-        </div>
-      </li>
-    ))}
-  </ul>
-);  
 
 function ListBox() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [isOpen1, setIsOpen1] = useState(true);
+  const [movies] = useState(tempMovieData);
+  const [isOpen, setIsOpen] = useState(true);
+
   return (
     <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen1((open) => !open)}
-      >
-        {isOpen1 ? "–" : "+"}
+      <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
+        {isOpen ? "–" : "+"}
       </button>
-      {isOpen1 && (
-        <MoviesList/>
-      )}
+      {isOpen && <MovieList movies={movies} />}
     </div>
   );
 }
-function watchedBox() {
-  const [watched, setWatched] = useState(tempWatchedData);
 
-  const [isOpen2, setIsOpen2] = useState(true);
-  return (<div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
+function MovieList({ movies }) {
+  return (
+    <ul className="list">
+      {movies.map((movie) => (
+        <li key={movie.imdbID}>
+          <img src={movie.Poster} alt={`${movie.Title} poster`} />
+          <h3>{movie.Title}</h3>
+          <div>
+            <p>
+              <span>🗓</span>
+              <span>{movie.Year}</span>
+            </p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function WatchedBox() {
+  const [watched] = useState(tempWatchedData);
+  const [isOpen, setIsOpen] = useState(true);
+
+  const avgImdbRating = average(watched.map((m) => m.imdbRating));
+  const avgUserRating = average(watched.map((m) => m.userRating));
+  const avgRuntime = average(watched.map((m) => m.runtime));
+
+  return (
+    <div className="box">
+      <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
+        {isOpen ? "–" : "+"}
       </button>
-      {isOpen2 && (
+
+      {isOpen && (
         <>
           <div className="summary">
             <h2>Movies you watched</h2>
@@ -164,15 +168,15 @@ function watchedBox() {
               </p>
               <p>
                 <span>⭐️</span>
-                <span>{avgImdbRating}</span>
+                <span>{avgImdbRating.toFixed(2)}</span>
               </p>
               <p>
                 <span>🌟</span>
-                <span>{avgUserRating}</span>
+                <span>{avgUserRating.toFixed(2)}</span>
               </p>
               <p>
                 <span>⏳</span>
-                <span>{avgRuntime} min</span>
+                <span>{Math.round(avgRuntime)} min</span>
               </p>
             </div>
           </div>
