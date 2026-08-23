@@ -48,9 +48,7 @@ const tempWatchedData = [
 ];
 
 const average = (arr) =>
-  arr.length === 0
-    ? 0
-    : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
+  arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 export default function App() {
   return (
@@ -111,7 +109,7 @@ function Main() {
 }
 
 function ListBox() {
-  const [movies] = useState(tempMovieData);
+  
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -119,27 +117,34 @@ function ListBox() {
       <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
         {isOpen ? "–" : "+"}
       </button>
-      {isOpen && <MovieList movies={movies} />}
+      {isOpen && <MovieList />}
     </div>
   );
 }
 
-function MovieList({ movies }) {
+function MovieList() {
+  const [movies,setMovies] = useState(tempMovieData);
   return (
     <ul className="list">
       {movies.map((movie) => (
-        <li key={movie.imdbID}>
-          <img src={movie.Poster} alt={`${movie.Title} poster`} />
-          <h3>{movie.Title}</h3>
-          <div>
-            <p>
-              <span>🗓</span>
-              <span>{movie.Year}</span>
-            </p>
-          </div>
-        </li>
+        <Movie movie={movies}/>
       ))}
     </ul>
+  );
+}
+
+function Movie({movie}) {
+  return (
+    <li key={movie.imdbID}>
+      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title}</h3>
+      <div>
+        <p>
+          <span>🗓</span>
+          <span>{movie.Year}</span>
+        </p>
+      </div>
+    </li>
   );
 }
 
