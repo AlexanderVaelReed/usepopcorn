@@ -61,7 +61,7 @@ export default function App() {
       </NavBar>
       <Main>
           <ListBox ><MovieList movies={movies}/></ListBox>
-      <Main/>
+      </Main>
   </>
   );
 }
