@@ -52,22 +52,24 @@ const average = (arr) =>
 
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
-  return (
-    <>
-      <NavBar movies={movies}/>
-      <Main movies={movies}/>
-    </>
+  return(
+  <>
+      <NavBar>
+        
+        <Search />
+        <NumResults movies={movies}/>
+      </NavBar>
+      <Main>
+          <ListBox ><MovieList movies={movies}/></ListBox>
+      <Main/>
+  </>
   );
 }
 
-function NavBar({movies}) {
-  return (
-    <nav className="nav-bar">
-      <Logo />
-      <Search />
-      <NumResults movies={movies}/>
-    </nav>
-  );
+function NavBar({ children }) {
+  return <nav className="nav-bar">
+    <Logo />
+    {children}</nav>;
 }
 
 function Logo() {
@@ -92,7 +94,7 @@ function Search() {
   );
 }
 
-function NumResults({movies}) {
+function NumResults({ movies }) {
   return (
     <p className="num-results">
       Found <strong>{movies.length}</strong> results
@@ -100,16 +102,16 @@ function NumResults({movies}) {
   );
 }
 
-function Main({movies}) {
+function Main({ children }) {
   return (
     <main className="main">
-      <ListBox movies={movies}/>
+      {children}
       <WatchedBox />
     </main>
   );
 }
 
-function ListBox({movies}) {
+function ListBox({ children }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -117,14 +119,12 @@ function ListBox({movies}) {
       <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
         {isOpen ? "–" : "+"}
       </button>
-      {isOpen && <MovieList movies={movies}/>}
+      {isOpen && children}
     </div>
   );
 }
 
-function MovieList({movies}) {
-  
-
+function MovieList({ movies }) {
   return (
     <ul className="list">
       {movies.map((movie) => (
@@ -154,23 +154,23 @@ function WatchedBox() {
   const [watched] = useState(tempWatchedData);
   const [isOpen, setIsOpen] = useState(true);
 
- 
-
   return (
     <div className="box">
       <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
         {isOpen ? "–" : "+"}
       </button>
 
-      {isOpen && <>
-      <WatchedSummary watched={watched}/>
-      <WatchedMovieList watched={watched}/>
-        </>}
+      {isOpen && (
+        <>
+          <WatchedSummary watched={watched} />
+          <WatchedMovieList watched={watched} />
+        </>
+      )}
     </div>
   );
 }
-function WatchedSummary({watched}) {
-   const avgImdbRating = average(watched.map((m) => m.imdbRating));
+function WatchedSummary({ watched }) {
+  const avgImdbRating = average(watched.map((m) => m.imdbRating));
   const avgUserRating = average(watched.map((m) => m.userRating));
   const avgRuntime = average(watched.map((m) => m.runtime));
   return (
@@ -198,31 +198,33 @@ function WatchedSummary({watched}) {
   );
 }
 
-function WatchedMovie({movie}){
-  return(<li key={movie.imdbID}>
-          <img src={movie.Poster} alt={`${movie.Title} poster`} />
-          <h3>{movie.Title}</h3>
-          <div>
-            <p>
-              <span>⭐️</span>
-              <span>{movie.imdbRating}</span>
-            </p>
-            <p>
-              <span>🌟</span>
-              <span>{movie.userRating}</span>
-            </p>
-            <p>
-              <span>⏳</span>
-              <span>{movie.runtime} min</span>
-            </p>
-          </div>
-        </li>)
+function WatchedMovie({ movie }) {
+  return (
+    <li key={movie.imdbID}>
+      <img src={movie.Poster} alt={`${movie.Title} poster`} />
+      <h3>{movie.Title}</h3>
+      <div>
+        <p>
+          <span>⭐️</span>
+          <span>{movie.imdbRating}</span>
+        </p>
+        <p>
+          <span>🌟</span>
+          <span>{movie.userRating}</span>
+        </p>
+        <p>
+          <span>⏳</span>
+          <span>{movie.runtime} min</span>
+        </p>
+      </div>
+    </li>
+  );
 }
-function WatchedMovieList({watched}) {
+function WatchedMovieList({ watched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovie movie={watched}/>
+        <WatchedMovie movie={watched} />
       ))}
     </ul>
   );
