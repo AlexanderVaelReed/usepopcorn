@@ -115,7 +115,6 @@ function Main({ children }) {
   return (
     <main className="main">
       {children}
-      <WatchedBox />
     </main>
   );
 }
@@ -159,20 +158,20 @@ function Movie({ movie }) {
   );
 }
 
-function WatchedBox({ children }) {
+// function WatchedBox({ children }) {
  
-  const [isOpen, setIsOpen] = useState(true);
+//   const [isOpen, setIsOpen] = useState(true);
 
-  return (
-    <div className="box">
-      <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
-        {isOpen ? "–" : "+"}
-      </button>
+//   return (
+//     <div className="box">
+//       <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
+//         {isOpen ? "–" : "+"}
+//       </button>
 
-      {isOpen && children}
-    </div>
-  );
-}
+//       {isOpen && children}
+//     </div>
+//   );
+// }
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((m) => m.imdbRating));
   const avgUserRating = average(watched.map((m) => m.userRating));
