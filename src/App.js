@@ -50,6 +50,8 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
+
+
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
    const [watched] = useState(tempWatchedData);
