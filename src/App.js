@@ -121,7 +121,7 @@ function Main({ children }) {
   );
 }
 
-function Box({ element}) {
+function Box({ children }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
@@ -129,7 +129,7 @@ function Box({ element}) {
       <button className="btn-toggle" onClick={() => setIsOpen((o) => !o)}>
         {isOpen ? "–" : "+"}
       </button>
-      {isOpen && element}
+      {isOpen && children}
     </div>
   );
 }
