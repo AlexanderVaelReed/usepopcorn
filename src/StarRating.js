@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import PropTypes from "prop-types"
 const containerst = {
   display: "flex",
   flexDirection: "row",
@@ -10,6 +10,9 @@ const containerst = {
 const starContainerStyles = {
   display: "flex",
 };
+StarRating.propTypes={
+  maxRating:PropTypes.number.isRequired,
+}
 
 export default function StarRating({
   maxRating = 5,
