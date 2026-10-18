@@ -51,10 +51,15 @@ const average = (arr) =>
   arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 
+const KEY = "fcbfc800";
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-   const [watched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+   const [watched ,setWatched] = useState([]);
+   fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=vikings`).then((res) => res.json()).then((data) => setMovies(data.Search));  
+
+
+
   return (
     <>
       <NavBar>
