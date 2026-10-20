@@ -59,13 +59,13 @@ export default function App() {
   const query = "vikings";
 
   
-useEffect(() => {
+useEffect(function(){
   async function fetchMovies() {
     const res = await fetch(
       `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
     );
     const data = await res.json();
-    if (data.Response === "True") setMovies(data.Search);
+   setMovies(data.Search);
   }
   fetchMovies();
 }, []);
