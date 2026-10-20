@@ -30,5 +30,5 @@ root.render(
      defaultRating={2}
     /> */}
     <Test />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
