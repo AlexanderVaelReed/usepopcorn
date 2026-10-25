@@ -366,7 +366,7 @@ function MovieDetail({ selectedId, onCloseMovie }) {
       <button className="btn-back" onClick={onCloseMovie}>
         &larr;
       </button></> }
-      {selectedId}
+      {/* {selectedId} */}
     
     </div>
   );
