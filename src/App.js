@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import StarRating from "./StarRating";
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -308,20 +308,17 @@ function MovieDetail({ selectedId, onCloseMovie }) {
     Genre: genre,
   } = movie;
 
-  useEffect(
-    function () {
-      async function getMovieDetails() {
-        const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
-        );
+  useEffect(function () {
+    async function getMovieDetails() {
+      const res = await fetch(
+        `http://www.omdbapi.com/?apikey=${KEY}&i=${selectedId}`,
+      );
 
-        const data = await res.json();
-        setMovie(data);
-      }
-      getMovieDetails();
-    },
-    [],
-  );
+      const data = await res.json();
+      setMovie(data);
+    }
+    getMovieDetails();
+  }, [selectedId]);
   return (
     <div className="details">
       <header>
@@ -343,8 +340,8 @@ function MovieDetail({ selectedId, onCloseMovie }) {
       </header>
 
       <section>
-        <div className="rating">
-          <div>
+        {/* <div className="rating">
+          {/* <div>
             <span>🌟</span>
             <span>8.0</span>
           </div>
@@ -352,6 +349,9 @@ function MovieDetail({ selectedId, onCloseMovie }) {
             <span>⭐️</span>
             <span>7.0</span>
           </div>
+        </div> */}
+        <div className="rating">
+          <StarRating maxRating={10} size={24} defaultRating={1} />
         </div>
 
         <p>
@@ -359,7 +359,7 @@ function MovieDetail({ selectedId, onCloseMovie }) {
         </p>
         <p>Starring {actors}</p>
         <p>Directed by {director}</p>
-      </section>  
+      </section>
       <button className="btn-back" onClick={onCloseMovie}>
         &larr;
       </button>
