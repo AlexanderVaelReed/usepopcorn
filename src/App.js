@@ -78,21 +78,24 @@ export default function App() {
   function handleCloseMovie() {
     setSelectedId(null);
   }
-function handleDeleteWatched(id) {
+  function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
+  
+
+
+
   useEffect(
     function () {
-const controller = new AbortController();
-
-
+      const controller = new AbortController();
 
       async function fetchMovies() {
         try {
           setIsLoading(true);
           setError("");
           const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,{ signal: controller.signal}
+            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+            { signal: controller.signal },
           );
           if (!res.ok)
             throw new Error("Something went wrong with fetching movies");
@@ -150,7 +153,10 @@ const controller = new AbortController();
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} onDeleteWatched={handleDeleteWatched} />
+              <WatchedMovieList
+                watched={watched}
+                onDeleteWatched={handleDeleteWatched}
+              />
             </>
           )}{" "}
         </Box>
@@ -287,17 +293,31 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMovie({ movie,onDeleteWatched }) {
+function WatchedMovie({ movie, onDeleteWatched }) {
   return (
     <li>
       <img src={movie.poster} alt={`${movie.title} poster`} />
       <h3>{movie.title}</h3>
       <div>
-        <p><span>⭐️</span><span>{movie.imdbRating}</span></p>
-        <p><span>🌟</span><span>{movie.userRating}</span></p>
-        <p><span>⏳</span><span>{movie.runtime} min</span></p>
+        <p>
+          <span>⭐️</span>
+          <span>{movie.imdbRating}</span>
+        </p>
+        <p>
+          <span>🌟</span>
+          <span>{movie.userRating}</span>
+        </p>
+        <p>
+          <span>⏳</span>
+          <span>{movie.runtime} min</span>
+        </p>
       </div>
-      <button className="btn-delete" onClick={() => onDeleteWatched(movie.imdbID)}>x</button>
+      <button
+        className="btn-delete"
+        onClick={() => onDeleteWatched(movie.imdbID)}
+      >
+        x
+      </button>
     </li>
   );
 }
@@ -307,7 +327,9 @@ function MovieDetail({ selectedId, onCloseMovie, onAddWatched, watched }) {
   const [isLoading, setIsLoading] = useState(false);
   const [userRating, setUserRating] = useState(0);
   const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.userRating;
+  const watchedUserRating = watched.find(
+    (movie) => movie.imdbID === selectedId,
+  )?.userRating;
   const {
     Title: title,
     Year: year,
@@ -334,6 +356,16 @@ const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.
     onAddWatched(newWatchedMovie);
     onCloseMovie();
   }
+  useEffect(
+    function () {
+     document.addEventListener("keydown", function (e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
+      });
+    },
+    [onCloseMovie],
+  );
 
   useEffect(
     function () {
@@ -350,13 +382,16 @@ const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.
     },
     [selectedId],
   );
-  useEffect(function () {
-    if (!title) return;
-    document.title = `Movie | ${title}`;
-    return () => {
-      document.title = "usePopcorn";
-    };
-  }, [title]);
+  useEffect(
+    function () {
+      if (!title) return;
+      document.title = `Movie | ${title}`;
+      return () => {
+        document.title = "usePopcorn";
+      };
+    },
+    [title],
+  );
 
   return (
     <div className="details">
@@ -392,10 +427,11 @@ const watchedUserRating = watched.find((movie) => movie.imdbID === selectedId)?.
                   onSetRating={setUserRating}
                 />
               )}
-              {userRating > 0 && <button className="btn-add" onClick={handleAdd}>
-                + Add to list
-              </button>}
-              
+              {userRating > 0 && (
+                <button className="btn-add" onClick={handleAdd}>
+                  + Add to list
+                </button>
+              )}
             </div>
             <p>
               <em>{plot}</em>
