@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import StarRating from "./StarRating";
 
-
 const average = (arr) =>
   arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
@@ -9,18 +8,22 @@ const KEY = "fcbfc800";
 
 export default function App() {
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  // const [watched, setWatched] = useState([]);
+  const [watched, setWatched] = useState(function () {
+    const storedData = localStorage.getItem("watched");
+    return storedData ? JSON.parse(storedData) : [];
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-
 
   function handleSelectMovie(id) {
     setSelectedId((selectedId) => (id === selectedId ? null : id));
   }
   function handleAddWatched(movie) {
     setWatched((watched) => [...watched, movie]);
+    // localStorage.setItem("watched", JSON.stringify([...watched, movie]));
   }
   function handleCloseMovie() {
     setSelectedId(null);
@@ -28,9 +31,13 @@ export default function App() {
   function handleDeleteWatched(id) {
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
-  
 
-
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched],
+  );
 
   useEffect(
     function () {
@@ -65,7 +72,6 @@ export default function App() {
         setError("");
         return;
       }
-
 
       handleCloseMovie();
       fetchMovies();
@@ -200,7 +206,6 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((m) => m.imdbRating));
   const avgUserRating = average(watched.map((m) => m.userRating));
@@ -280,11 +285,10 @@ function MovieDetail({ selectedId, onCloseMovie, onAddWatched, watched }) {
     Genre: genre,
   } = movie;
 
-
-// /* eslint-disable  */
-// if (imdbRating > 8)[isTop, setIsTop] = useState(true);
-const isTop = imdbRating > 8;
-const [avgRating, setAvgRating] = useState(0);
+  // /* eslint-disable  */
+  // if (imdbRating > 8)[isTop, setIsTop] = useState(true);
+  const isTop = imdbRating > 8;
+  // const [avgRating, setAvgRating] = useState(0);
 
   function handleAdd() {
     const newWatchedMovie = {
@@ -297,29 +301,26 @@ const [avgRating, setAvgRating] = useState(0);
       userRating,
     };
     onAddWatched(newWatchedMovie);
-    // onCloseMovie();
 
-setAvgRating(Number(imdbRating))
-setAvgRating((avgRating) =>(avgRating + userRating) / 2);
-
-
+    // setAvgRating(Number(imdbRating))
+    // setAvgRating((x) =>(x + userRating) / 2);
   }
   useEffect(
-  function () {
-    function callback(e) {
-      if (e.code === "Escape") {
-        onCloseMovie();
+    function () {
+      function callback(e) {
+        if (e.code === "Escape") {
+          onCloseMovie();
+        }
       }
-    }
 
-    document.addEventListener("keydown", callback);
+      document.addEventListener("keydown", callback);
 
-    return function () {
-      document.removeEventListener("keydown", callback);
-    };
-  },
-  [onCloseMovie]
-);
+      return function () {
+        document.removeEventListener("keydown", callback);
+      };
+    },
+    [onCloseMovie],
+  );
 
   useEffect(
     function () {
@@ -370,7 +371,7 @@ setAvgRating((avgRating) =>(avgRating + userRating) / 2);
               </p>
             </div>
           </header>
-          <p>{avgRating}</p>
+          {/* <p>{avgRating}</p> */}
           <section>
             <div className="rating">
               {isWatched ? (
