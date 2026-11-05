@@ -11,13 +11,10 @@ export default function App() {
  const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
 
-const [watched, setWatched] = useLocalStorageRate([]);
+const [watched, setWatched] = useLocalStorageRate([] , "watched");
 
 
-  // const [watched, setWatched] = useState(function () {
-  //   const storedData = localStorage.getItem("watched");
-  //   return storedData ? JSON.parse(storedData) : [];
-  // });
+
  
 const { movies, isLoading, error } = useMovies(query);
 
@@ -35,12 +32,7 @@ const { movies, isLoading, error } = useMovies(query);
     setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
   }
 
-  useEffect(
-    function () {
-      localStorage.setItem("watched", JSON.stringify(watched));
-    },
-    [watched],
-  );
+  
 
   
 
