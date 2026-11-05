@@ -2,15 +2,9 @@
 import { useState, useEffect } from "react";
 
 
-export function useLocalStorageRate(key, initialValue) {
-  const [value, setValue] = useState(() => {
-    const storedValue = localStorage.getItem(key);
-    return storedValue ? JSON.parse(storedValue) : initialValue;
+export function useLocalStorageRate(initialValue) {
+  const [watched, setWatched] = useState(function () {
+    const storedData = localStorage.getItem("watched");
+    return storedData ? JSON.parse(storedData) : [];
   });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-
-  return [value, setValue];
 }
