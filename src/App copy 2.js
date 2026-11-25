@@ -5,7 +5,7 @@ const average = (arr) =>
   arr.length === 0 ? 0 : arr.reduce((acc, cur) => acc + cur / arr.length, 0);
 
 const KEY = "fcbfc800";
-
+//test//
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
